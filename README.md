@@ -13,6 +13,14 @@ Project Setup
 1. Activate conda env: `source .venv/bin/activate`.
 1. Install pip requirements: `make requirements`.
 
+
+### Model Scripts
+1. `cd` into `src/models`
+1. Trining: `python ./train_model.py`
+1. Validating: `python ./train_model.py`
+1. Testing: `python ./train_model.py`. A file inside `src/results/test-output.json` will be generated with predicted and actual queries. 
+
+
 Project Organization
 ------------
 
