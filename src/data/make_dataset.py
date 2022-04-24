@@ -30,7 +30,7 @@ def main(input_filepath, output_filepath):
     # Path to the generated mimic.db. No need to update.
     out_dir = output_filepath
 
-    conn = sqlite3.connect(os.path.join(out_dir, "mimic_all.db"))
+    conn = sqlite3.connect(os.path.join(out_dir, "mimic_all.db"), timeout=30)
     id2name_path = os.path.join(data_dir, "id2name.csv")
     mimic_files_path = os.path.join(data_dir, "files")
 
@@ -40,10 +40,11 @@ def main(input_filepath, output_filepath):
     build_prescriptions_table(mimic_files_path, out_dir, conn)
     build_lab_table(mimic_files_path, out_dir, conn)
 
+    conn.close()
     print("Begin sampling ...")
     # DEMOGRAPHIC
     print("Processing DEMOGRAPHIC")
-    conn = sqlite3.connect(os.path.join(out_dir, "mimic.db"))
+    conn = sqlite3.connect(os.path.join(out_dir, "mimic.db"), timeout=30)
     data_demo = pandas.read_csv(os.path.join(out_dir, "DEMOGRAPHIC.csv"))
     data_demo_sample = data_demo.sample(100, random_state=0)
     data_demo_sample.to_sql("DEMOGRAPHIC", conn, if_exists="replace", index=False)
@@ -100,6 +101,7 @@ def main(input_filepath, output_filepath):
         show_progress(cnt, len(sampled_id))
     data_out = pandas.concat(data_filter, ignore_index=True)
     data_out.to_sql("LAB", conn, if_exists="replace", index=False)
+    conn.close()
     print("Done!")
 
 
