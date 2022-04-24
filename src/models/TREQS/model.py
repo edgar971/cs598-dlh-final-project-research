@@ -139,15 +139,16 @@ class TREQS(BaseModel):
         self.beam_search()
         try:
             myseq = self.word_copy()
-        except  BaseException as err:
+        except BaseException as err:
             print(err)
             print("Running without manually word copying.")
             myseq = torch.cat(self.beam_data[0][0], 0)
             myseq = myseq.data.cpu().numpy().tolist()
             myseq = [self.batch_data["id2vocab"][idx] for idx in myseq]
 
-        self.test_data["sql_gold"] = " ".join(self.batch_data["trg_txt"][0])
-        self.test_data["sql_pred"] = " ".join(myseq)
+        self.test_data["src_txt"] = " ".join(self.batch_data["src_txt"][0])
+        self.test_data["input_sql"] = " ".join(self.batch_data["trg_txt"][0])
+        self.test_data["pred_sql"] = " ".join(myseq)
 
     def build_batch(self, batch_id):
         """

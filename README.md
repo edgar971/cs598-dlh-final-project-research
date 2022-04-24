@@ -20,6 +20,16 @@ Project Setup
 1. Validating: `python ./train_model.py`
 1. Testing: `python ./train_model.py`. A file inside `src/results/test-output.json` will be generated with predicted and actual queries. 
 
+### Generating SQLite and test data files from sampling
+1. Download full `MIMIC-III Clinical Database`: 
+    - Demo: https://physionet.org/content/mimiciii-demo/1.4/
+    - Full: https://physionet.org/content/mimiciii/1.4/
+1. Unzip and place all CSV files inside `src/data/mimic_iii/files`.
+1. `cd src/data`
+1. Run the `make_dataset.py`: 
+    - `python make_dataset.py ./mimic_iii ./mimic_iii_processed/`
+1. This should generated the needed SQLite files to run the generated queries from the model. 
+
 
 Project Organization
 ------------

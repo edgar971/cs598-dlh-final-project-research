@@ -19,11 +19,17 @@ lib/
 lib64/
 parts/
 results/
+results-*
 sdist/
 var/
 *.egg-info/
 .installed.cfg
 *.egg
+src/data/mimic_iii_processed/*
+!src/data/mimic_iii_processed/.gitkeep
+
+src/data/mimic_iii/files/*
+!src/data/mimic_iii/files/.gitkeep
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
