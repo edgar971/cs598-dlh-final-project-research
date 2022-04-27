@@ -11,6 +11,7 @@ from TREQS.modules.attention.nats_attention_encoder import AttentionEncoder
 from TREQS.modules.attention.nats_attention_decoder import AttentionDecoder
 from TREQS.base import BaseModel
 from TREQS.modules.encoder.main_encoder import MainEncoder
+from src.models.TREQS.modules.decoder.main_decoder import MainDecoder
 
 
 class TREQS(BaseModel):
@@ -64,7 +65,7 @@ class TREQS(BaseModel):
         Please contact ping@vt.edu or tshi@vt.edu
         Original repo from: https://github.com/wangpinggl/TREQS
         """
-        self.build_encoder()
+        self.encode()
         lastwd = Variable(torch.LongTensor([self.batch_data["vocab2id"]["select"]])).to(
             self.args["device"]
         )
@@ -83,7 +84,7 @@ class TREQS(BaseModel):
                         torch.LongTensor([self.batch_data["vocab2id"]["<unk>"]])
                     ).to(self.args["device"])
                 self.pipe_data["decoderA"]["last_word"] = lastwd
-                self.build_decoder_one_step(k)
+                self.decode_step(k)
                 prob = self.build_vocab_distribution()
                 prob = torch.log(prob)
 
@@ -199,6 +200,8 @@ class TREQS(BaseModel):
         ).to(self.args["device"])
 
         # Parent Decoder
+        # self.train_models["decoder_main"] = MainDecoder(self.args)
+
         self.train_models["decoderRNN"] = torch.nn.LSTMCell(
             self.args["emb_dim"] + self.args["trg_hidden_dim"],
             self.args["trg_hidden_dim"],
@@ -233,7 +236,7 @@ class TREQS(BaseModel):
             self.args["trg_hidden_dim"], self.args["emb_dim"], bias=False
         ).to(self.args["device"])
 
-    def build_encoder(self):
+    def encode(self):
         """
         Encoder Pipeline
         self.pipe_data = {
@@ -271,11 +274,10 @@ class TREQS(BaseModel):
             )
             self.pipe_data["decoderFF"]["trg_seq_emb"] = trg_emb
 
-    def build_decoder_one_step(self, k=0):
+    def decode_step(self, k=0):
         """
-        Decoder one-step
+        Decoder one-step t
         """
-        # embedding at current decoding step
         if self.args["task"] == "train" or self.args["task"] == "validate":
             self.pipe_data["decoderA"] = self.pipe_data["decoderB"]
             word_emb = self.pipe_data["decoderFF"]["trg_seq_emb"][:, k]
@@ -284,6 +286,7 @@ class TREQS(BaseModel):
                 self.pipe_data["decoderA"]["last_word"]
             )
 
+        # self.train_models["decoder_main"](self.pipe_data, word_emb)
         h_attn = self.pipe_data["decoderA"]["h_attn"]
 
         dec_input = torch.cat((word_emb, h_attn), 1)
@@ -413,9 +416,9 @@ class TREQS(BaseModel):
         Output is loss.
         Input is word one-hot encoding.
         """
-        self.build_encoder()
+        self.encode()
         for k in range(self.args["trg_seq_len"]):
-            self.build_decoder_one_step(k)
+            self.decode_step(k)
         pred_output = self.build_vocab_distribution()
 
         pad_mask = torch.ones(self.batch_data["vocab_size"]).to(self.args["device"])
