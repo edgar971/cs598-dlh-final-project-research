@@ -15,3 +15,4 @@ pandas
 
 # backwards compatibility
 pathlib2
+sumeval
