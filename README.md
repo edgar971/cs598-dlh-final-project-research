@@ -7,6 +7,20 @@ Team:
 
 Final project code data paper and presentation. 
 
+### Original work reproduced
+Ping Wang, Tian Shi, and Chandan K. Reddy. "Text-to-SQL Generation for Question Answering on Electronic Medical Records." In Proceedings of The Web Conference 2020 (WWW’20), pp. 350-361, 2020.
+
+```
+@inproceedings{wang2020text,
+  title={Text-to-SQL Generation for Question Answering on Electronic Medical Records},
+  author={Wang, Ping and Shi, Tian and Reddy, Chandan K},
+  booktitle={Proceedings of The Web Conference 2020},
+  pages={350--361},
+  year={2020}
+}
+```
+Original work repository: https://github.com/wangpinggl/TREQS
+
 Project Setup
 ------------
 1. Create conda environment: `make create_environment`.
@@ -81,3 +95,32 @@ Project Organization
 
 
 --------
+
+## Reproduction Results
+
+<table>
+  <thead>
+    <tr>
+      <th>Questions Dataset</th>
+      <th colspan="2">Reproduction Results</th>
+      <th colspan="2">Original Work Results</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td><td>Acc_LF</td><td>Acc_EX</td><td>Acc_LF</td><td>Acc_EX</td>
+    </tr>
+    <tr>
+      <td>Template</td><td>0.595</td><td>0.756</td><td>0.802</td><td>0.825</td>
+    </tr>
+    <tr>
+      <td>Template + recover</td><td>0.239</td><td>0.394</td><td>0.912</td><td>0.940</td>
+    </tr>
+    <tr>
+      <td>NL</td><td>0.442</td><td>0.700</td><td>0.486</td><td>0.556</td>
+    </tr>
+    <tr>
+      <td>NL + recover</td><td>0.165</td><td>0.352</td><td>0.556</td><td>0.654</td>
+    </tr>
+  </tbody>
+</table>
